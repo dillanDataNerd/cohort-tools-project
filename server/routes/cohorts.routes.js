@@ -8,7 +8,7 @@ router.post("/", async (req, res, next) => {
   console.log(req.body);
   const { inProgress, cohortSlug, cohortName, program, campus, startDate, endDate, programManager, leadTeacher, totalHours } = req.body;
   try {
-    await Cohort.create({
+    const response = await Cohort.create({
       inProgress,
       cohortSlug,
       cohortName,
@@ -20,7 +20,7 @@ router.post("/", async (req, res, next) => {
       leadTeacher,
       totalHours,
     });
-    res.status(201).send("Cohort Created");
+    res.status(201).json(response);
   } catch (error) {
     console.log(error);
     next(error);
@@ -29,8 +29,17 @@ router.post("/", async (req, res, next) => {
 
 //GET /api/cohorts - Retrieves all of the cohorts in the database collection
 router.get("/", async (req, res, next) => {
+  const query = {};
+  if (req.query.campus) {
+    query.campus = req.query.campus;
+  }
+  if (req.query.program) {
+    query.program = req.query.program;
+  }
+  
   try {
-    const response = await Cohort.find();
+    const response = await Cohort.find(query);
+    // console.log(response);
     res.json(response);
   } catch (error) {
     console.error(error);

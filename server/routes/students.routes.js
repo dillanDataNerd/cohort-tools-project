@@ -16,6 +16,7 @@ router.post("/", async (req, res, next) => {
       program: req.body.program,
       background: req.body.background,
       image: req.body.image,
+      cohort: req.body.cohort
     });
 
     res.status(201).send("Student Created");
