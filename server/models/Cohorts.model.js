@@ -14,6 +14,6 @@ const cohortSchema = new Schema({
   totalHours: Number,
 });
 
-const Cohort=mongoose.model("Cohort",cohortSchema)
+const Cohort = mongoose.model("Cohort",cohortSchema)
 
 module.exports = Cohort
