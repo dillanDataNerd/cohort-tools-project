@@ -13,4 +13,7 @@ router.get("/docs", (req, res) => {
 router.use("/cohorts", cohortsRouter);
 router.use("/students", studentsRouter);
 
+const authRouter = require ("./auth.routes")
+router.use ("/auth", authRouter)
+
 module.exports = router;
