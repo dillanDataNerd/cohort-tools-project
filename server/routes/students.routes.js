@@ -62,7 +62,18 @@ router.get("/:studentId", async (req, res, next) => {
 // PUT /api/students/:studentId - Updates a specific student by id
 router.put("/:studentId", async (req, res, next) => {
   try {
-    const response = await Student.findByIdAndUpdate(req.params.studentId, req.body, { new: true });
+    const response = await Student.findByIdAndUpdate(req.params.studentId, {
+      firstName: req.body.firstName,
+      lastName: req.body.lastName,
+      email: req.body.email,
+      phone: req.body.phone,
+      linkedinUrl: req.body.linkedinUrl,
+      languages: req.body.languages,
+      program: req.body.program,
+      background: req.body.background,
+      image: req.body.image,
+      cohort: req.body.cohort
+    }, { new: true });
     res.status(202).json(response);
   } catch (error) {
     console.error(error);

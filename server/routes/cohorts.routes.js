@@ -60,8 +60,20 @@ router.get("/:cohortId", async (req, res, next) => {
 
 //PUT /api/cohorts/:cohortId - Updates a specific cohort by id
 router.put("/:cohortId", async (req, res, next) => {
+  const { inProgress, cohortSlug, cohortName, program, campus, startDate, endDate, programManager, leadTeacher, totalHours } = req.body;
   try {
-    const response = await Cohort.findByIdAndUpdate(req.params.cohortId, req.body, { new: true });
+    const response = await Cohort.findByIdAndUpdate(req.params.cohortId, {
+      inProgress,
+      cohortSlug,
+      cohortName,
+      program,
+      campus,
+      startDate,
+      endDate,
+      programManager,
+      leadTeacher,
+      totalHours,
+    }, { new: true });
     res.status(202).json(response);
   } catch (error) {
     console.error(error);
