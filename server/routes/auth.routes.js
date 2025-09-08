@@ -36,6 +36,36 @@ router.post("/signup", async (req, res, next) => {
 });
 
 // POST /auth/login - Checks the sent email and password and, if email and password are correct returns a JWT
+router.post("/login", async (req, res, next) => {
+  console.log(req.body);
+  const { email, password } = req.body;
+  // Check if email and password is not empty
+  if (!email || !password) {
+    res.status(400).json({errorMessage: "The email and password should not be empty"})
+    return;
+  }
+  
+  try {
+    const foundUser = await User.findOne({ email })
+    if (!foundUser) {
+      res.status(401).json({ errorMessage: "The user doesn't exist" });
+      return;
+    }
+
+    const isPasswordCorrect = await bcrypt.compare(password, foundUser.password);
+    if (!isPasswordCorrect) {
+      res.status(401).json({ errorMessage: "Incorrect password" });
+      return;
+    }
+
+    const payload = { _id: foundUser._id, name: foundUser.name, email: foundUser.email };
+    const authToken = jwt.sign( payload, `${process.env.TOKEN_SECRET_KEY}`, { algorithm: "HS256", expiresIn: "10m"})
+    
+    res.status(202).json({ authToken });
+  } catch (error) {
+    console.log(error)
+  }
+});
 
 // GET /auth/verify - Verifies that the JWT sent by the client is valid
 
