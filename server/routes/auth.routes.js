@@ -4,6 +4,7 @@ const router = express.Router();
 const bcrypt = require("bcryptjs");
 const jwt = require("jsonwebtoken");
 const User = require("../models/User.model");
+const validateToken = require("../middlewares/auth.middleware");
 
 // POST /auth/signup - Creates a new user in the database
 router.post("/signup", async (req, res, next) => {
@@ -32,6 +33,7 @@ router.post("/signup", async (req, res, next) => {
 
   } catch (error) {
     console.log(error);
+    next(error);
   }
 });
 
@@ -64,9 +66,14 @@ router.post("/login", async (req, res, next) => {
     res.status(202).json({ authToken });
   } catch (error) {
     console.log(error)
+    next(error);
   }
 });
 
 // GET /auth/verify - Verifies that the JWT sent by the client is valid
+router.get("/verify", validateToken, (req, res) => {
+  console.log("VERIFY:", req.payload);
+  res.status(200).json(req.payload);
+});
 
 module.exports = router
